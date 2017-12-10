@@ -1,7 +1,8 @@
 <?php
-    include "src/couriers.php";
-    include "src/aftership.php";
+    include "src/module/couriers.php";
+    include "src/module/aftership.php";
     
+
     if(empty($_GET)) {
         echo "Error";
     } else {
@@ -36,6 +37,7 @@
                 
                 if (count($temp->data->tracking->checkpoints) > 0) {
                     $results[$k] = json_decode($data['response']);
+                    debug($results[$k]);
                     $tracking[$k] = $results[$k]->data->tracking;
                     $checkpoints[$k] = $results[$k]->data->tracking->checkpoints;
                 } else {
@@ -65,16 +67,6 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> 
-<script type="text/javascript">
-    $(document).ready(function() {
-        $("#btnAdd").click(function() {
-            $("#formfix").append('<div class="mdl-cell mdl-cell--2-col mdl-cell--12-col-tablet space"></div><div class="mdl-cell mdl-cell--4-col mdl-cell--12-col-tablet fixedin"><input type="text" class="form-control" id="usr" placeholder="Masukan Resi"></div><div class="mdl-cell mdl-cell--4-col mdl-cell--12-col-tablet fixedin"><div class="form-group"><select class="form-control"><option>JNE</option><option>SICEPAT</option><option>NINJA</option><option>POS</option></select></div></div>' + '<div class="mdl-cell mdl-cell--2-col mdl-cell--12-col-tablet space"></div>');
-        });
-        $('body').on('click','#btnRemove',function() {
-            $(this).parent('div.mdl-cell').remove()
-        });
-    });
-</script>
 <style>
 table{
     width: 100%;
@@ -169,7 +161,7 @@ table{
             margin-top: -50px;
         }
     }
-    </style>
+</style>
 </head>
 
 <body>
@@ -195,159 +187,169 @@ table{
   </div>
   <main class="mdl-layout__content">
     <div class="page-content">
-        <?php foreach ($results as $k => $result): ?>
-        <?php if (count($checkpoints[$k]) > 0): ?>
+        <?php //foreach ($results as $k => $result): ?>
+        <?php //if (count($checkpoints[$k]) > 0): ?>
         <div class="mdl-grid">
-            <div class="mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet">
+            <?php foreach ($results as $k => $result): ?>
+            
+            <div class="mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet">          
                 <center>
-                <div class="demo-card-wide mdl-card mdl-shadow--2dp">
-                  <div class="mdl-card__title">
-                    <div class="mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet">
-                        <Center>
-                            <h2 style="color: black; margin-top: 10px;"><?= $couriers[$k]['name'] ?></h2><br><hr style="width: 50%; margin-top: -20px;">
-                            <h4 style="color: black; margin-top: -10px;"><?= $couriers[$k]['customer_services'] ?></h4>
-                        </Center>
-                    </div>
-                  </div>
-                    <div class="mdl-grid">
-                    <div class="mdl-cell mdl-cell--6-col mdl-cell--12-col-tablet">
-                        <table class="mdl-data-table mdl-js-data-table">
-                            <thead>
-                                <tr>
-                                    <th colspan="2"><center>Informasi</center></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td id="kiri"><b>No Resi</b></td>
-                                    <td id="kiri"><?= $tracking[$k]->tracking_number ?></td>
-                                </tr>
-                                <tr>
-                                    <td id="kiri"><b>Status</b></td>
-                                    <td id="kiri"><?= $tracking[$k]->tag ?></td>
-                                </tr>
-                                <tr>
-                                    <td id="kiri"><b>Tanggal Pengiriman</b></td>
-                                    <td id="kiri"><?= $tracking[$k]->shipment_pickup_date ?></td>
-                                </tr>
-                                <?php if ($tracking[$k]->tag == 'Delivered'): ?>
-                                <tr>
-                                    <td id="kiri"><b>Asal</b></td>
-                                    <td id="kiri">Terkirim</td>
-                                </tr>
-                                <tr>
-                                    <td id="kiri"><b>Tujuan</b></td>
-                                    <td id="kiri">Terkirim</td>
-                                </tr>
-                                <tr>
-                                    <td id="kiri"><b>Tanggal Diterima</b></td>
-                                    <td id="kiri">Terkirim</td>
-                                </tr>
-                                <tr>
-                                      <td id="kiri"><b>Nama Penerima</b></td>
-                                      <td id="kiri">Terkirim</td>
-                                </tr>
-                                <tr>
-                                      <td id="kiri"><b>Nomor Telephone</b></td>
-                                      <td id="kiri">Terkirim</td>
-                                </tr>
-                                <?php endif ?>
-                           </tbody>
-                        </table>
-                    </div>
-                    <div class="mdl-cell mdl-cell--6-col mdl-cell--12-col-tablet">
-                        <center>
-                        <table class="mdl-data-table mdl-js-data-table">
-                            <thead>
-                                <tr>
-                                    <th colspan="3"><center>History</center></th>
-                                </tr>
-                                <tr>
-                                    <td><center><b>Tanggal</b></center></td>
-                                    <td><center><b>Status</b></center></td>
-                                    <td><center><b>Lokasi</b></center></td>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php foreach ($checkpoints[$k] as $checkpoint): ?>
-                                <tr>
-                                    <td id="kiri"><?= $checkpoint->checkpoint_time; ?></td>
-                                    <td id="kiri"><?= $checkpoint->message; ?></td>
-                                    <td id="kiri"><?= $checkpoint->location; ?></td>
-                                </tr>
-                                <?php endforeach; ?>
-                           </tbody>
-                        </table>
-                        </center>
-                    </div>
-                </div>
-                <div class="mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet">
-                  <div class="mdl-card__actions mdl-card--border">
-                    <div style="display: inline-block; text-align: right; width: 100%">
-                    <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" onclick="window.location.href='hasil.html'">
-                        <i class="material-icons">keyboard_arrow_left</i>
-                    </button>
-                    <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" onclick="window.location.href='hasil.html'">
-                        <i class="material-icons">keyboard_arrow_right</i>
-                    </button>
-                    <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" onclick="window.location.href='Checkres.html'">
-                        <i class="material-icons">home</i>
-                    </button>
-                    <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" style="text-transform: none;">
-                        <a style="color: white; font-size: 9px;">Kunjungi Ekspedisi</a>
-                    </button>
-                    </div>
-                  </div>
-              </div>
-                </div>
-            </center>
-            </div>
-        </div>
-        <?php else: ?>
-        <div class="mdl-grid">
-            <div class="mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet" style="margin-top: 10%">
-                <center>
-                <div class="demo-card-wide mdl-card mdl-shadow--2dp">
-                  <div class="mdl-card__title">
-                  </div>
-                    <div class="mdl-grid">
+                <?php if (count($checkpoints[$k]) > 0): ?>
+                    <div id="result<?= $k ?>" style="display: none" class="demo-card-wide mdl-card mdl-shadow--2dp">
+                        <div class="mdl-card__title">
+                            <div class="mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet">
+                                <Center>
+                                    <h2 style="color: black; margin-top: 10px;"><?= $couriers[$k]['name'] ?></h2><br><hr style="width: 50%; margin-top: -20px;">
+                                    <h4 style="color: black; margin-top: -10px;"><?= $couriers[$k]['customer_services'] ?></h4>
+                                </Center>
+                            </div>
+                        </div>
+                        <div class="mdl-grid">
+                            <div class="mdl-cell mdl-cell--6-col mdl-cell--12-col-tablet">
+                                <table class="mdl-data-table mdl-js-data-table">
+                                    <thead>
+                                        <tr>
+                                            <th colspan="2"><center>Informasi</center></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td id="kiri"><b>No Resi</b></td>
+                                            <td id="kiri"><?= $tracking[$k]->tracking_number ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td id="kiri"><b>Status</b></td>
+                                            <td id="kiri"><?= $tracking[$k]->tag ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td id="kiri"><b>Tanggal Pengiriman</b></td>
+                                            <td id="kiri"><?= $tracking[$k]->shipment_pickup_date ?></td>
+                                        </tr>
+                                        <?php if ($tracking[$k]->tag == 'Delivered'): ?>
+                                        <tr>
+                                            <td id="kiri"><b>Asal</b></td>
+                                            <td id="kiri">Terkirim</td>
+                                        </tr>
+                                        <tr>
+                                            <td id="kiri"><b>Tujuan</b></td>
+                                            <td id="kiri">Terkirim</td>
+                                        </tr>
+                                        <tr>
+                                            <td id="kiri"><b>Tanggal Diterima</b></td>
+                                            <td id="kiri">Terkirim</td>
+                                        </tr>
+                                        <tr>
+                                            <td id="kiri"><b>Nama Penerima</b></td>
+                                            <td id="kiri">Terkirim</td>
+                                        </tr>
+                                        <tr>
+                                            <td id="kiri"><b>Nomor Telephone</b></td>
+                                            <td id="kiri">Terkirim</td>
+                                        </tr>
+                                        <?php endif ?>
+                                </tbody>
+                                </table>
+                            </div>
+                            <div class="mdl-cell mdl-cell--6-col mdl-cell--12-col-tablet">
+                                <center>
+                                    <table class="mdl-data-table mdl-js-data-table">
+                                        <thead>
+                                            <tr>
+                                                <th colspan="3"><center>History</center></th>
+                                            </tr>
+                                            <tr>
+                                                <td><center><b>Tanggal</b></center></td>
+                                                <td><center><b>Status</b></center></td>
+                                                <td><center><b>Lokasi</b></center></td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php foreach ($checkpoints[$k] as $checkpoint): ?>
+                                            <tr>
+                                                <td id="kiri"><?= $checkpoint->checkpoint_time; ?></td>
+                                                <td id="kiri"><?= $checkpoint->message; ?></td>
+                                                <td id="kiri"><?= $checkpoint->location; ?></td>
+                                            </tr>
+                                            <?php endforeach; ?>
+                                        </tbody>
+                                    </table>
+                                </center>
+                            </div>
+                        </div>
+                    
+                <?php else: ?>
+                    <div id="result<?= $k ?>" style="display: none" class="demo-card-wide mdl-card mdl-shadow--2dp">
+                        <div class="mdl-card__title">
+                        </div>
+                        <div class="mdl-grid">
+                            <div class="mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet">
+                                <center>
+                                    <h2>
+                                        Mohon Maaf ! <br>
+                                        Resi Yang Anda Cari <br>
+                                        Tidak Ditemukan <br>
+                                        <hr>
+                                    </h2>
+                                </center>
+                            </div>
+                        </div>
+
+                <?php endif; ?>
+
                         <div class="mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet">
-                            <center>
-                                <h2>
-                                    Mohon Maaf ! <br>
-                                    Resi Yang Anda Cari <br>
-                                    Tidak Ditemukan <br>
-                                    <hr>
-                                </h2>
-                            </center>
+                            <div class="mdl-card__actions mdl-card--border">
+                                <div style="display: inline-block; text-align: right; width: 100%">
+                                    <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" onclick="prev(<?= $k ?>)">
+                                        <i class="material-icons">keyboard_arrow_left</i>
+                                    </button>
+                                    <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" onclick="next(<?= $k ?>)">
+                                        <i class="material-icons">keyboard_arrow_right</i>
+                                    </button>
+                                    <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" onclick="window.location.href='index.php'">
+                                        <i class="material-icons">home</i>
+                                    </button>
+                                    <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" style="text-transform: none;">
+                                        <a style="color: white; font-size: 9px;">Kunjungi Ekspedisi</a>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                <div class="mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet">
-                  <div class="mdl-card__actions mdl-card--border">
-                    <div style="display: inline-block; text-align: right; width: 100%">
-                    <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" onclick="window.location.href='hasil.html'">
-                        <i class="material-icons">keyboard_arrow_left</i>
-                    </button>
-                    <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" onclick="window.location.href='hasil.html'">
-                        <i class="material-icons">keyboard_arrow_right</i>
-                    </button>
-                    <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" onclick="window.location.href='Checkres.html'">
-                        <i class="material-icons">home</i>
-                    </button>
-                    <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" style="text-transform: none;">
-                        <a style="color: white; font-size: 9px;">Kunjungi Ekspedisi</a>
-                    </button>
-                    </div>
-                  </div>
-              </div>
-                </div>
-            </center>
+                </center>
             </div>
+            
+            <?php endforeach; ?>
         </div>
-        <?php endif;?>
-        <?php endforeach; ?>
+       
     </div>
   </main>
 </div>
+<script>
+    document.getElementById("result0").style.display = 'block';
+    
+    function next(id) {
+        var nextId = id + 1;
+        var numElement = <?= count($results) ?>
+        
+        if (nextId == numElement) {
+            nextId = 0;
+        }
+
+        document.getElementById("result" + id).style.display = 'none';
+        document.getElementById("result" + nextId).style.display = 'block';   
+    }
+
+    function prev(id) {
+        var prevId = id - 1;
+        var numElement = <?= count($results) ?>
+
+        if (prevId < 0) {
+            prevId = numElement - 1;
+        }
+
+        document.getElementById("result" + id).style.display = 'none';
+        document.getElementById("result" + prevId).style.display = 'block';
+    }
+</script>
 </body>
 </html>

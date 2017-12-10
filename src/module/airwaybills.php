@@ -1,6 +1,6 @@
 <?php
     
-    include "conn.php";
+    include "../conn.php";
     include "couriers.php";
 
     // A functio to add new airwaybills
