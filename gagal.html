@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Checkres</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
+</head>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> 
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#btnAdd").click(function() {
+            $("#formfix").append('<div class="mdl-cell mdl-cell--2-col mdl-cell--12-col-tablet space"></div><div class="mdl-cell mdl-cell--4-col mdl-cell--12-col-tablet fixedin"><input type="text" class="form-control" id="usr" placeholder="Masukan Resi"></div><div class="mdl-cell mdl-cell--4-col mdl-cell--12-col-tablet fixedin"><div class="form-group"><select class="form-control"><option>JNE</option><option>SICEPAT</option><option>NINJA</option><option>POS</option></select></div></div>' + '<div class="mdl-cell mdl-cell--2-col mdl-cell--12-col-tablet space"></div>');
+        });
+        $('body').on('click','#btnRemove',function() {
+            $(this).parent('div.mdl-cell').remove()
+        });
+    });
+</script>
+<style>
+table{
+    width: 100%;
+}
+ td {
+
+    /* css-3 */
+    white-space: -o-pre-wrap; 
+    word-wrap: break-word;
+    white-space: pre-wrap; 
+    white-space: -moz-pre-wrap; 
+    white-space: -pre-wrap;
+
+}   #ex3 { width: 250px; }
+    #judul{
+        margin-top: 15px;
+    }
+    #formfix{
+        margin-top: 10px;
+    }
+    .spacer{
+        margin-top: -30px;
+    }
+    #kiri{
+        text-align: left;
+    }
+    #myButton {
+            width: 100%;
+            height: 40px;
+            min-width: initial;
+        }
+    .demo-card-wide.mdl-card {
+      width: 80%;
+    }
+    .demo-card-wide > .mdl-card__title {
+      color: #fff;
+      height: 100px;
+      align-items: center;
+      text-align: center;
+ 
+    }
+    .demo-card-wide > .mdl-card__menu {
+      color: #fff;
+    }
+    @media (max-width: 840px) {
+        .space { display: none; }
+        .add{
+            margin-top: -40px;
+        }
+        .send{
+            margin-top: -50px;
+        }
+           /* hide it elsewhere */
+    }
+
+    @media (min-width: 1145px) and (max-width: 1282px){
+        .add{
+            margin-top: -95px;
+            margin-left: -30px;
+        }
+        .fixedin{
+        margin-top: -14px;
+        }
+        .send{
+            margin-top: -50px;
+        }
+    }
+    @media (min-width: 1026px) and (max-width: 1145px){
+        .add{
+            margin-top: -95px;
+            margin-left: -20px;
+        }
+        .send{
+            margin-top: -50px;
+        }
+    }
+    @media (min-width: 907px) and (max-width: 1026px){
+        .add{
+            margin-top: -95px;
+            margin-left: -10px;
+        }
+        .send{
+            margin-top: -50px;
+        }
+    }
+    @media (min-width: 841px) and (max-width: 907px){
+        .add{
+            margin-top: -95px;
+            margin-left: -3px;
+        }
+        .send{
+            margin-top: -50px;
+        }
+    }
+    </style>
+</head>
+
+<body>
+    <!-- Always shows a header, even in smaller screens. -->
+<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+  <header class="mdl-layout__header">
+    <div class="mdl-layout__header-row">
+      <!-- Title -->
+      <span class="mdl-layout-title">CheckRes</span>
+      <!-- Add spacer, to align navigation to the right -->
+      <div class="mdl-layout-spacer"></div>
+      <!-- Navigation. We hide it in small screens. -->
+    </div>
+  </header>
+  <div class="mdl-layout__drawer">
+    <span class="mdl-layout-title">CheckRes</span>
+    <nav class="mdl-navigation">
+      <a class="mdl-navigation__link" href="">Link</a>
+      <a class="mdl-navigation__link" href="">Link</a>
+      <a class="mdl-navigation__link" href="">Link</a>
+      <a class="mdl-navigation__link" href="">Link</a>
+    </nav>
+  </div>
+  <main class="mdl-layout__content">
+    <div class="page-content">
+        <div class="mdl-grid">
+            <div class="mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet" style="margin-top: 10%">
+                <center>
+                <div class="demo-card-wide mdl-card mdl-shadow--2dp">
+                  <div class="mdl-card__title">
+                  </div>
+                    <div class="mdl-grid">
+                        <div class="mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet">
+                            <center>
+                                <h2>
+                                    Mohon Maaf ! <br>
+                                    Resi Yang Anda Cari <br>
+                                    Tidak Ditemukan <br>
+                                    <hr>
+                                </h2>
+                            </center>
+                        </div>
+                    </div>
+                <div class="mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet">
+                  <div class="mdl-card__actions mdl-card--border">
+                    <div style="display: inline-block; text-align: right; width: 100%">
+                    <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" onclick="window.location.href='hasil.html'">
+                        <i class="material-icons">keyboard_arrow_left</i>
+                    </button>
+                    <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" onclick="window.location.href='hasil.html'">
+                        <i class="material-icons">keyboard_arrow_right</i>
+                    </button>
+                    <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" onclick="window.location.href='Checkres.html'">
+                        <i class="material-icons">home</i>
+                    </button>
+                    <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" style="text-transform: none;">
+                        <a style="color: white; font-size: 9px;">Kunjungi Ekspedisi</a>
+                    </button>
+                    </div>
+                  </div>
+              </div>
+                </div>
+            </center>
+            </div>
+        </div>
+    </div>
+  </main>
+</div>
+</body>
+</html>
