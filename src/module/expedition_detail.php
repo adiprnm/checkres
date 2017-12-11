@@ -13,4 +13,15 @@
         }
     }
 
+    function getExpeditionDetail($receiptNum) {
+        $query = "SELECT * FROM expedition_detail WHERE receipt_num = '" . $receiptNum . "'";
+        $result = mysqli_query($GLOBALS['conn'], $query);
+
+        if ( !$result ) {
+            debug("Error at expedition_detail.php: " . mysql_error($GLOBALS['conn']));
+        } else {
+            return mysqli_fetch_assoc($result);
+        }
+    }
+
 ?>

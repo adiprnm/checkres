@@ -6,6 +6,7 @@
     include "src/module/aftership.php";
     include "src/module/airwaybills.php";
     include "src/module/expedition_detail.php";
+    include "src/module/histories.php";
     
 
     if(empty($_GET)) {
@@ -32,37 +33,78 @@
                 $results[$k] = json_decode($data['response']);
                 $tracking[$k] = $results[$k]->data->tracking;
                 $checkpoints[$k] = $results[$k]->data->tracking->checkpoints;
+
+                // delete previous history
+                $history = getHistory($tracking[$k]->tracking_number);
+                // debug($history);
+                deleteHistory($history['expedition_id']);
+                
+                // GET NEW EXPEDITION DETAIL
+                $expeditionDetail = getExpeditionDetail($tracking[$k]->tracking_number);
+                // INSERT TO histories table
+                foreach ($checkpoints[$k] as $checkpoint) {
+                    $status = getStatusByDesc($checkpoint->tag);
+                    
+                    addNewHistory($expeditionDetail['id'],
+                        $checkpoint->checkpoint_time,
+                        $status,
+                        $checkpoint->location,
+                        $checkpoint->message);
+                }
+                
+
             
             } else {
-                $postData = callAfterShipAPI('POST', $_GET['no_resi'][$k], $slug);
-                sleep(2);
-                $getData = callAfterShipAPI('GET', $_GET['no_resi'][$k], $slug);
-                $info[$k] = $getData['info'];
-                $temp = json_decode($getData['response']);
-                // debug($temp);
-                
-                if (count($temp->data->tracking->checkpoints) > 0) {
-                    $results[$k] = json_decode($getData['response']);
-                    
-                    $tracking[$k] = $results[$k]->data->tracking;
-                    $checkpoints[$k] = $results[$k]->data->tracking->checkpoints;
-
-                    // insert to database
-                    addNewAWB($tracking[$k]->tracking_number, $slug);
-                    $status = getStatusByDesc($tracking[$k]->tag);
-                    $userId = 1;
-                    $dateSent = $tracking[$k]->shipment_pickup_date;
-
-                    addNewExpeditionDetail($tracking[$k]->tracking_number,
-                        $userId,
-                        $status['id'],
-                        $dateSent);
-
-
-                } else {
+                // if no_resi empty
+                if (empty($_GET['no_resi'][$k])) {
                     $results[$k] = "";
                     $tracking[$k] = "";
                     $checkpoints[$k] = [];
+                } else {
+                    $postData = callAfterShipAPI('POST', $_GET['no_resi'][$k], $slug);
+                    sleep(5);
+                    $getData = callAfterShipAPI('GET', $_GET['no_resi'][$k], $slug);
+                    $info[$k] = $getData['info'];
+                    $temp = json_decode($getData['response']);
+                    debug($temp);
+                    
+                    if (!emptycount($temp->data->tracking->checkpoints) > 0) {
+                        $results[$k] = json_decode($getData['response']);
+                        
+                        $tracking[$k] = $results[$k]->data->tracking;
+                        $checkpoints[$k] = $results[$k]->data->tracking->checkpoints;
+    
+                        // debug($tracking[$k]->tracking_number);
+                        // insert new AWB to database
+                        addNewAWB($tracking[$k]->tracking_number, $slug);
+                        
+                        $status = getStatusByDesc($tracking[$k]->tag);
+                        $userId = 1;
+                        $dateSent = $tracking[$k]->shipment_pickup_date;
+    
+                        // INSERT NEW EXPEITION DETAIL
+                        addNewExpeditionDetail($tracking[$k]->tracking_number,
+                            $userId,
+                            $status['id'],
+                            $dateSent);
+    
+                        // GET NEW EXPEDITION DETAIL
+                        $expeditionDetail = getExpeditionDetail($tracking[$k]->tracking_number);
+                        // INSERT TO histories table
+                        foreach ($checkpoints[$k] as $checkpoint) {
+                            $status = getStatusByDesc($checkpoint->tag);
+                            
+                            addNewHistory($expeditionDetail['id'],
+                                $checkpoint->checkpoint_time,
+                                $status,
+                                $checkpoint->location,
+                                $checkpoint->message);
+                        }
+                    } else {
+                        $results[$k] = "";
+                        $tracking[$k] = "";
+                        $checkpoints[$k] = [];
+                    }   
                 }
             }
 
@@ -246,24 +288,8 @@ table{
                                         </tr>
                                         <?php if ($tracking[$k]->tag == 'Delivered'): ?>
                                         <tr>
-                                            <td id="kiri"><b>Asal</b></td>
-                                            <td id="kiri">Terkirim</td>
-                                        </tr>
-                                        <tr>
-                                            <td id="kiri"><b>Tujuan</b></td>
-                                            <td id="kiri">Terkirim</td>
-                                        </tr>
-                                        <tr>
                                             <td id="kiri"><b>Tanggal Diterima</b></td>
                                             <td id="kiri"><?= $checkpoints[$k][count($checkpoints[$k])-1]->checkpoint_time; ?></td>
-                                        </tr>
-                                        <tr>
-                                            <td id="kiri"><b>Nama Penerima</b></td>
-                                            <td id="kiri">Terkirim</td>
-                                        </tr>
-                                        <tr>
-                                            <td id="kiri"><b>Nomor Telephone</b></td>
-                                            <td id="kiri">Terkirim</td>
                                         </tr>
                                         <?php endif ?>
                                 </tbody>

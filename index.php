@@ -35,7 +35,7 @@
 <script type="text/javascript">
     $(document).ready(function() {
         $("#btnAdd").click(function() { 
-            $("#formfix").append('<?php echo $options ?>');
+            $("#formfix").append('<?php echo $options ?><div class="mdl-cell mdl-cell--2-col mdl-cell--12-col-tablet"></div>');
         });
         $('body').on('click','#btnRemove',function() {
             $(this).parent('div.mdl-cell').remove()

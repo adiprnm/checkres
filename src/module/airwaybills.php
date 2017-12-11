@@ -14,7 +14,7 @@
             // debug($query);
             $result = mysqli_query($GLOBALS['conn'], $query);
             if (empty($result)) {
-                debug("Error: " . mysqli_error($GLOBALS['conn']));
+                debug("Error in airwaybills.php addNewAWB: " . mysqli_error($GLOBALS['conn']));
             }
         }
         
@@ -26,12 +26,10 @@
         
         if ( empty($result) ) {
             $query = "INSERT INTO receiptnums (receipt_num, expedition_id) values ('" . $receiptNum . "', " . $courier['id'] .  ")";
-            debug("Test 1");
             $result = mysqli_query($GLOBALS['conn'], $query);
             
             if ( empty($result) ) {
-                debug("Test 2");
-                debug("Error: " . mysqli_error($GLOBALS['conn']));
+                debug("Error in airwaybills.php getAWB: " . mysqli_error($GLOBALS['conn']));
             } else {
                 return mysqli_fetch_assoc($result);
             }
