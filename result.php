@@ -1,7 +1,11 @@
 <?php
+
+    include "src/conn.php";
+    include "src/module/status.php";
     include "src/module/couriers.php";
     include "src/module/aftership.php";
     include "src/module/airwaybills.php";
+    include "src/module/expedition_detail.php";
     
 
     if(empty($_GET)) {
@@ -45,6 +49,15 @@
 
                     // insert to database
                     addNewAWB($tracking[$k]->tracking_number, $slug);
+                    $status = getStatusByDesc($tracking[$k]->tag);
+                    $userId = 1;
+                    $dateSent = $tracking[$k]->shipment_pickup_date;
+
+                    addNewExpeditionDetail($tracking[$k]->tracking_number,
+                        $userId,
+                        $status['id'],
+                        $dateSent);
+
 
                 } else {
                     $results[$k] = "";

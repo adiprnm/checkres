@@ -1,6 +1,4 @@
 <?php
-    
-    include_once(__DIR__ . '/../conn.php');
 
     // A function to get courier by slug
     function getCourierBySlug($slug) {
