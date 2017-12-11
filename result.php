@@ -1,6 +1,7 @@
 <?php
     include "src/module/couriers.php";
     include "src/module/aftership.php";
+    include "src/module/airwaybills.php";
     
 
     if(empty($_GET)) {
@@ -30,16 +31,21 @@
             
             } else {
                 $postData = callAfterShipAPI('POST', $_GET['no_resi'][$k], $slug);
+                sleep(2);
                 $getData = callAfterShipAPI('GET', $_GET['no_resi'][$k], $slug);
                 $info[$k] = $getData['info'];
                 $temp = json_decode($getData['response']);
-
+                // debug($temp);
                 
                 if (count($temp->data->tracking->checkpoints) > 0) {
-                    $results[$k] = json_decode($data['response']);
-                    debug($results[$k]);
+                    $results[$k] = json_decode($getData['response']);
+                    
                     $tracking[$k] = $results[$k]->data->tracking;
                     $checkpoints[$k] = $results[$k]->data->tracking->checkpoints;
+
+                    // insert to database
+                    addNewAWB($tracking[$k]->tracking_number, $slug);
+
                 } else {
                     $results[$k] = "";
                     $tracking[$k] = "";
@@ -236,7 +242,7 @@ table{
                                         </tr>
                                         <tr>
                                             <td id="kiri"><b>Tanggal Diterima</b></td>
-                                            <td id="kiri">Terkirim</td>
+                                            <td id="kiri"><?= $checkpoints[$k][count($checkpoints[$k])-1]->checkpoint_time; ?></td>
                                         </tr>
                                         <tr>
                                             <td id="kiri"><b>Nama Penerima</b></td>
