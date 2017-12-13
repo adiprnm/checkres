@@ -9,7 +9,7 @@
         $curlParams = [
             CURLOPT_HTTPHEADER      => array(
                 'Content-Type: application/json',
-                'aftership-api-key: 9e4f1b10-6527-4dca-ab6f-8010221e6a34'
+                'aftership-api-key: bf8f30b7-025c-4592-b532-fbca83ead4e3'
             ),
             CURLOPT_URL             => $trackingUrl . $courier . "/" . $awbNum,
             CURLOPT_RETURNTRANSFER  => 1,

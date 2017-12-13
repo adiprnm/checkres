@@ -66,11 +66,10 @@
                     $getData = callAfterShipAPI('GET', $_GET['no_resi'][$k], $slug);
                     $info[$k] = $getData['info'];
                     $temp = json_decode($getData['response']);
-                    debug($temp);
+                    // debug($postData['response']);
                     
-                    if (!count($temp->data->tracking->checkpoints) > 0) {
+                    if (count($temp->data->tracking->checkpoints) > 0) {
                         $results[$k] = json_decode($getData['response']);
-                        
                         $tracking[$k] = $results[$k]->data->tracking;
                         $checkpoints[$k] = $results[$k]->data->tracking->checkpoints;
     
