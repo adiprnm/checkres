@@ -6,7 +6,7 @@
         
         $result = mysqli_query($GLOBALS['conn'], $query);
         if ( !$result ) {
-            debug("Error: " . mysqli_error($GLOBALS['conn']));
+            debug("Error at expedition_detail.php addNewExpeditionDetail: " . mysqli_error($GLOBALS['conn']));
             return 1;          
         } else {
             return 0;
@@ -18,7 +18,7 @@
         $result = mysqli_query($GLOBALS['conn'], $query);
 
         if ( !$result ) {
-            debug("Error at expedition_detail.php: " . mysql_error($GLOBALS['conn']));
+            debug("Error at expedition_detail.php getExpeditionDetail: " . mysql_error($GLOBALS['conn']));
         } else {
             return mysqli_fetch_assoc($result);
         }
