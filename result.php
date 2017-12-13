@@ -68,7 +68,7 @@
                     $temp = json_decode($getData['response']);
                     debug($temp);
                     
-                    if (!emptycount($temp->data->tracking->checkpoints) > 0) {
+                    if (!count($temp->data->tracking->checkpoints) > 0) {
                         $results[$k] = json_decode($getData['response']);
                         
                         $tracking[$k] = $results[$k]->data->tracking;
